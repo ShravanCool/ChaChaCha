@@ -1,3 +1,4 @@
+import pyfiglet
 from ChaCha import ChaCha
 import argparse
 import os, sys
@@ -66,6 +67,8 @@ def run(args):
 
 
 def main():
+    head = pyfiglet.figlet_format("ChaChaCha", font="slant")
+    print(head)
     parser = argparse.ArgumentParser(description="Encrypts and Decrypts text and image files using the ChaCha20 encryption algorithm", epilog="Enjoy the program! :)")
     parser.add_argument("-i","--in", help="Input file path", dest="input", type=str, required=True)
     parser.add_argument("-o","--out", help="Output file path", dest="output", type=str, required=True)
