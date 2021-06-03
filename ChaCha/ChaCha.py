@@ -1,6 +1,3 @@
-# Copyright (c) 2015, Hubert Kario
-#
-# See the LICENSE file for legal information regarding use of this file.
 """Pure Python implementation of ChaCha cipher
 
 Implementation that follows RFC 7539 closely.
@@ -11,6 +8,8 @@ from .compat import compat26Str
 import copy
 import os
 import struct
+import io
+import PIL.Image
 try:
     # in Python 3 the native zip returns iterator
     from itertools import izip
@@ -163,29 +162,47 @@ class ChaCha(object):
         return self.encrypt(ciphertext)
 
     def ImgEncrypt(self, plainimg):
-        cipherimg = np.asarray(plainimg)
-        shape = cipherimg.shape
-        cipherimg = cipherimg.flatten().tolist()
-        cipherimg = [self.encrypt(str(pix).encode()) for pix in cipherimg]
+        """Encrypts image data"""
+        enc_img = self.encrypt(plainimg)
 
-        return np.asarray(cipherimg).reshape(shape)
+        return enc_img
 
     def ImgDecrypt(self, cipherimg):
-        shape = cipherimg.shape
-        plainimg = cipherimg.flatten().tolist()
-        plainimg = [self.decrypt(pix) for pix in plainimg]
-        plainimg = [pix.decode() for pix in plainimg]
-        plainimg = [int(pix) for pix in plainimg]
-        plainimg = [pix if pix < 255 else 255 for pix in plainimg]
-        plainimg = [pix if pix > 0 else 0 for pix in plainimg]
+        """Decrypts image data"""
+        img = self.decrypt(cipherimg)
 
-        return np.asarray(plainimg).reshape(shape)
+        return img
 
+# Driver code
 # def main():
     # key = os.urandom(32)
     # nonce = os.urandom(12)
 
+    # img = 'pic1.jpg'
+
     # encryptor = ChaCha(key, nonce)
+
+    # img_file = open(img, 'rb')
+    # img_data = img_file.read()
+    # img_file.close()
+    # enc_img = encryptor.ImgEncrypt(img_data)
+    # # print(res)
+    # enc_file = open(img + ".enc", "wb")
+    # enc_file.write(enc_img)
+    # enc_file.close()
+
+    # dec_file = open(img + '.enc', 'rb')
+    # dec_img = dec_file.read()
+    # dec_file.close()
+    # res = encryptor.ImgDecrypt(dec_img)
+
+    # img_stream = io.BytesIO(res)
+
+    # img_file = PIL.Image.open(img_stream)
+    # img_file.save('out_' + img)
+    # print(res)
+
+
 
     # plaintext = b'Hello World'
     # print("Plaintext:", plaintext)
@@ -194,6 +211,6 @@ class ChaCha(object):
     # message = encryptor.decrypt(ciphertext)
     # print("Decrypted text:", message)
 
-# main()
+main()
 
 
