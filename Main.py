@@ -2,6 +2,8 @@ import pyfiglet
 from ChaCha import ChaCha
 import argparse
 import os, sys
+import io
+import PIL.Image
 
 def run(args):
     input_path = args.input
@@ -30,37 +32,60 @@ def run(args):
     encryptor = ChaCha.ChaCha(key, nonce)
 
     if args.encrypt:
-        with open(input_path) as f:
-            message = f.readlines()
+        if '.txt' in input_path:
+            with open(input_path, 'rb') as f:
+                # message = f.readlines()
+                plaintext = f.readlines()
 
-        print(type(message[0]))
-        plaintext = message[0].encode('utf-8')
-        print(plaintext)
-        ciphertext = encryptor.encrypt(plaintext)
-        print(ciphertext)
-        ciphertext = bytes(ciphertext)
-        print(ciphertext)
+            # print(type(message[0]))
+            # plaintext = message[0].encode('utf-8')
+            print(plaintext)
+            ciphertext = encryptor.encrypt(plaintext)
+            print(ciphertext)
+            ciphertext = bytes(ciphertext)
+            print(ciphertext)
 
-        with open(output_path,"wb") as f:
-            # cipher = ciphertext.decode('utf-8') 
-            # print(cipher)
-            f.write(ciphertext)
+            with open(output_path,"wb") as f:
+                # cipher = ciphertext.decode('utf-8') 
+                # print(cipher)
+                f.write(ciphertext)
+        else:
+            with open(input_path,'rb') as img_file:
+                img_data = img_file.read()
+
+            enc_img = encryptor.ImgEncrypt(img_data)
+
+            with open(output_path, 'wb') as enc_file:
+                enc_file.write(enc_img)
+
 
         print("Encrypted Successfully!!")
         sys.exit()
 
     elif args.decrypt:
-        with open(input_path, 'rb') as f:
-            ciphertext = f.read()
+        if '.txt' in input_path:
+            with open(input_path, 'rb') as f:
+                ciphertext = f.read()
 
-        # ciphertext = message.encode('utf-8')
-        plaintext  = encryptor.decrypt(ciphertext)
-        print(plaintext)
+            # ciphertext = message.encode('utf-8')
+            plaintext  = encryptor.decrypt(ciphertext)
+            print(plaintext)
 
-        with open(output_path,"w") as f:
-            message = plaintext.decode('utf-8')
-            print(message)
-            f.write(message)
+            with open(output_path,"w") as f:
+                message = plaintext.decode('utf-8')
+                print(message)
+                f.write(message)
+
+        else:
+            with open(input_path, 'rb') as dec_file:
+                dec_img = dec_file.read()
+
+            res = encryptor.ImgDecrypt(dec_img)
+
+            img_stream = io.BytesIO(res)
+
+            img_file = PIL.Image.open(img_stream)
+            img_file.save(output_path)
 
         print("Decrypted Successfully!!")
         sys.exit()
