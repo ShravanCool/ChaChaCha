@@ -8,8 +8,6 @@ from .compat import compat26Str
 import copy
 import os
 import struct
-import io
-import PIL.Image
 try:
     # in Python 3 the native zip returns iterator
     from itertools import izip
@@ -211,6 +209,6 @@ class ChaCha(object):
     # message = encryptor.decrypt(ciphertext)
     # print("Decrypted text:", message)
 
-main()
+# main()
 
 
