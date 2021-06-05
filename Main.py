@@ -33,17 +33,14 @@ def run(args):
 
     if args.encrypt:
         if '.txt' in input_path:
-            with open(input_path, 'rb') as f:
-                # message = f.readlines()
-                plaintext = f.readlines()
+            with open(input_path,'rb') as f:
+                plaintext = f.read()
 
-            # print(type(message[0]))
-            # plaintext = message[0].encode('utf-8')
-            print(plaintext)
+            # print(plaintext)
             ciphertext = encryptor.encrypt(plaintext)
-            print(ciphertext)
+            # print(ciphertext)
             ciphertext = bytes(ciphertext)
-            print(ciphertext)
+            # print(ciphertext)
 
             with open(output_path,"wb") as f:
                 # cipher = ciphertext.decode('utf-8') 
@@ -69,11 +66,11 @@ def run(args):
 
             # ciphertext = message.encode('utf-8')
             plaintext  = encryptor.decrypt(ciphertext)
-            print(plaintext)
+            # print(plaintext)
 
             with open(output_path,"w") as f:
                 message = plaintext.decode('utf-8')
-                print(message)
+                # print(message)
                 f.write(message)
 
         else:
