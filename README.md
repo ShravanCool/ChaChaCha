@@ -42,4 +42,6 @@ Use the '-h' or the '--help' flag in order to see the usage and required argumen
 | -d, --decrypt | For decrypting the file |
 | -h, --help | Show the help message and exit | 
 
+![ss1](./Sample.png)
 
+![ss2](./Sample_2.png)
